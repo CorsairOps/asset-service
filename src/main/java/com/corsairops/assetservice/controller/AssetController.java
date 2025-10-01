@@ -1,8 +1,9 @@
-package com.corsairops.fleetservice.controller;
+package com.corsairops.assetservice.controller;
 
-import com.corsairops.fleetservice.dto.AssetRequest;
-import com.corsairops.fleetservice.dto.AssetResponse;
-import com.corsairops.fleetservice.service.AssetService;
+import com.corsairops.assetservice.dto.AssetLocationResponse;
+import com.corsairops.assetservice.dto.AssetRequest;
+import com.corsairops.assetservice.dto.AssetResponse;
+import com.corsairops.assetservice.service.AssetService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -36,6 +37,14 @@ public class AssetController {
     @ResponseStatus(HttpStatus.OK)
     public AssetResponse getAssetById(@PathVariable("id") UUID id) {
         return AssetResponse.from(assetService.getAssetById(id));
+    }
+
+    @GetMapping("/{id}/locations")
+    @ResponseStatus(HttpStatus.OK)
+    public List<AssetLocationResponse> getAssetLocations(@PathVariable("id") UUID id) {
+        return assetService.getAssetLocations(id).stream()
+                .map(AssetLocationResponse::from)
+                .toList();
     }
 
     @PutMapping("/{id}")

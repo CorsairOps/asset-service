@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.corsairops</groupId>
-    <artifactId>fleet-service</artifactId>
+    <artifactId>asset-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>fleet-service</name>
-    <description>fleet-service</description>
+    <name>asset-service</name>
+    <description>asset-service</description>
     <url/>
     <licenses>
         <license/>

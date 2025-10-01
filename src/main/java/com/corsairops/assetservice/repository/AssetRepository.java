@@ -1,6 +1,6 @@
-package com.corsairops.fleetservice.repository;
+package com.corsairops.assetservice.repository;
 
-import com.corsairops.fleetservice.model.Asset;
+import com.corsairops.assetservice.model.Asset;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,4 +1,4 @@
-package com.corsairops.fleetservice.config;
+package com.corsairops.assetservice.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;

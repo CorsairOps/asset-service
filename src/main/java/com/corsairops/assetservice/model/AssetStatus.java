@@ -1,4 +1,4 @@
-package com.corsairops.fleetservice.model;
+package com.corsairops.assetservice.model;
 
 public enum AssetStatus {
     ACTIVE,

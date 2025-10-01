@@ -1,4 +1,4 @@
-package com.corsairops.fleetservice.model;
+package com.corsairops.assetservice.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -10,6 +10,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -31,9 +32,14 @@ public class Asset {
     @Column(nullable = false)
     private AssetStatus status;
 
-    @ManyToOne
-    @JoinColumn(name = "fleet_id", nullable = true)
-    private Fleet fleet;
+    @Column(nullable = false)
+    private Double longitude;
+
+    @Column(nullable = false)
+    private Double latitude;
+
+    @OneToMany(mappedBy = "asset", orphanRemoval = true, cascade = CascadeType.ALL)
+    private List<AssetLocation> assetLocations;
 
     @CreatedDate
     private LocalDateTime createdAt;

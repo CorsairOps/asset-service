@@ -1,16 +1,19 @@
-package com.corsairops.fleetservice.service;
+package com.corsairops.assetservice.service;
 
-import com.corsairops.fleetservice.dto.AssetRequest;
-import com.corsairops.fleetservice.exception.AssetNameConflictException;
-import com.corsairops.fleetservice.exception.AssetNotFoundException;
-import com.corsairops.fleetservice.model.Asset;
-import com.corsairops.fleetservice.model.Fleet;
-import com.corsairops.fleetservice.repository.AssetRepository;
+import com.corsairops.assetservice.dto.AssetRequest;
+import com.corsairops.assetservice.exception.AssetNameConflictException;
+import com.corsairops.assetservice.exception.AssetNotFoundException;
+import com.corsairops.assetservice.model.Asset;
+import com.corsairops.assetservice.model.AssetLocation;
+import com.corsairops.assetservice.repository.AssetRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -18,7 +21,6 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class AssetService {
     private final AssetRepository assetRepository;
-    private final FleetService fleetService;
 
     @Transactional(readOnly = true)
     public List<Asset> getAllAssets() {
@@ -35,13 +37,12 @@ public class AssetService {
     public Asset createAsset(AssetRequest assetRequest) {
         validateUniqueName(assetRequest.name());
 
-        Fleet fleet = fleetService.getFleetById(assetRequest.fleetId());
-
         Asset asset = Asset.builder()
                 .name(assetRequest.name())
                 .type(assetRequest.type())
                 .status(assetRequest.status())
-                .fleet(fleet)
+                .longitude(assetRequest.longitude())
+                .latitude(assetRequest.latitude())
                 .build();
 
         return assetRepository.save(asset);
@@ -52,12 +53,14 @@ public class AssetService {
         Asset existingAsset = getAssetById(id);
         validateUniqueName(assetRequest.name(), id);
 
-        Fleet fleet = fleetService.getFleetById(assetRequest.fleetId());
-
         existingAsset.setName(assetRequest.name());
         existingAsset.setType(assetRequest.type());
         existingAsset.setStatus(assetRequest.status());
-        existingAsset.setFleet(fleet);
+
+        if (!existingAsset.getLongitude().equals(assetRequest.longitude()) ||
+                !existingAsset.getLatitude().equals(assetRequest.latitude())) {
+            updateAssetLocation(existingAsset, assetRequest.longitude(), assetRequest.latitude());
+        }
 
         return assetRepository.save(existingAsset);
     }
@@ -70,6 +73,14 @@ public class AssetService {
         assetRepository.deleteById(id);
     }
 
+    @Transactional(readOnly = true)
+    public List<AssetLocation> getAssetLocations(UUID assetId) {
+        var asset = getAssetById(assetId);
+        List<AssetLocation> locations = new ArrayList<>(asset.getAssetLocations());
+        locations.sort(Comparator.comparing(AssetLocation::getTimestamp).reversed());
+        return locations;
+    }
+
     private void validateUniqueName(String name) {
         if (assetRepository.existsByNameIgnoreCase(name)) {
             throw new AssetNameConflictException("Asset name already exists", HttpStatus.CONFLICT);
@@ -80,5 +91,19 @@ public class AssetService {
         if (assetRepository.existsByNameIgnoreCaseAndIdNot(name, id)) {
             throw new AssetNameConflictException("Asset name already exists", HttpStatus.CONFLICT);
         }
+    }
+
+    private void updateAssetLocation(Asset asset, Double longitude, Double latitude) {
+        asset.setLongitude(longitude);
+        asset.setLatitude(latitude);
+
+        AssetLocation latestLocation = AssetLocation.builder()
+                .asset(asset)
+                .longitude(asset.getLongitude())
+                .latitude(asset.getLatitude())
+                .timestamp(LocalDateTime.now())
+                .build();
+
+        asset.getAssetLocations().add(latestLocation);
     }
 }

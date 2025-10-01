@@ -1,8 +1,8 @@
-package com.corsairops.fleetservice.dto;
+package com.corsairops.assetservice.dto;
 
-import com.corsairops.fleetservice.model.Asset;
-import com.corsairops.fleetservice.model.AssetStatus;
-import com.corsairops.fleetservice.model.AssetType;
+import com.corsairops.assetservice.model.Asset;
+import com.corsairops.assetservice.model.AssetStatus;
+import com.corsairops.assetservice.model.AssetType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.time.LocalDateTime;
@@ -13,7 +13,8 @@ public record AssetResponse(
         String name,
         AssetType type,
         AssetStatus status,
-        Long fleetId,
+        Double longitude,
+        Double latitutde,
         LocalDateTime createdAt,
         LocalDateTime updatedAt
 ) {
@@ -25,7 +26,8 @@ public record AssetResponse(
                 asset.getName(),
                 asset.getType(),
                 asset.getStatus(),
-                asset.getFleet() != null ? asset.getFleet().getId() : null,
+                asset.getLongitude(),
+                asset.getLatitude(),
                 asset.getCreatedAt(),
                 asset.getUpdatedAt()
         );

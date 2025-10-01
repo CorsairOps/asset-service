@@ -1,4 +1,4 @@
-package com.corsairops.fleetservice.exception;
+package com.corsairops.assetservice.exception;
 
 import com.corsairops.shared.exception.HttpResponseException;
 import org.springframework.http.HttpStatus;

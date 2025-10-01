@@ -1,13 +1,13 @@
-package com.corsairops.fleetservice;
+package com.corsairops.assetservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class FleetServiceApplication {
+public class AssetServiceApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(FleetServiceApplication.class, args);
+        SpringApplication.run(AssetServiceApplication.class, args);
     }
 
 }

@@ -1,4 +1,4 @@
-package com.corsairops.fleetservice.exception;
+package com.corsairops.assetservice.exception;
 
 import com.corsairops.shared.exception.SimpleGlobalExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;

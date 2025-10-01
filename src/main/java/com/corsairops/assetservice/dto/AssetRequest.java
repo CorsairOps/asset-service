@@ -1,7 +1,7 @@
-package com.corsairops.fleetservice.dto;
+package com.corsairops.assetservice.dto;
 
-import com.corsairops.fleetservice.model.AssetStatus;
-import com.corsairops.fleetservice.model.AssetType;
+import com.corsairops.assetservice.model.AssetStatus;
+import com.corsairops.assetservice.model.AssetType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -16,6 +16,10 @@ public record AssetRequest(
         @NotNull(message = "Status is required")
         AssetStatus status,
 
-        Long fleetId
+        @NotNull
+        Double longitude,
+
+        @NotNull
+        Double latitude
 ) {
 }
