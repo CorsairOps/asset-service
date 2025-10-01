@@ -1,0 +1,21 @@
+services:
+  fleet-service-db:
+    image: postgres:15
+    container_name: fleet-service-db
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - "5432:5432"
+    volumes:
+      - fleet-service-data:/var/lib/postgresql/data
+    networks:
+      - fleet-service-network
+
+volumes:
+  fleet-service-data:
+
+networks:
+  fleet-service-network:
+    driver: bridge
