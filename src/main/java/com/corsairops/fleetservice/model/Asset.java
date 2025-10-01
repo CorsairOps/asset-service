@@ -32,7 +32,7 @@ public class Asset {
     private AssetStatus status;
 
     @ManyToOne
-    @JoinColumn(name = "fleet_id")
+    @JoinColumn(name = "fleet_id", nullable = true)
     private Fleet fleet;
 
     @CreatedDate

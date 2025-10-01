@@ -30,7 +30,7 @@ public class Fleet {
 
     private String description;
 
-    @OneToMany(mappedBy = "fleet", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "fleet", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = false)
     private List<Asset> assets;
 
     @CreatedDate
