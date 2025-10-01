@@ -4,6 +4,7 @@ import com.corsairops.fleetservice.dto.AssetRequest;
 import com.corsairops.fleetservice.exception.AssetNameConflictException;
 import com.corsairops.fleetservice.exception.AssetNotFoundException;
 import com.corsairops.fleetservice.model.Asset;
+import com.corsairops.fleetservice.model.Fleet;
 import com.corsairops.fleetservice.repository.AssetRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class AssetService {
     private final AssetRepository assetRepository;
+    private final FleetService fleetService;
 
     @Transactional(readOnly = true)
     public List<Asset> getAllAssets() {
@@ -33,10 +35,13 @@ public class AssetService {
     public Asset createAsset(AssetRequest assetRequest) {
         validateUniqueName(assetRequest.name());
 
+        Fleet fleet = fleetService.getFleetById(assetRequest.fleetId());
+
         Asset asset = Asset.builder()
                 .name(assetRequest.name())
                 .type(assetRequest.type())
                 .status(assetRequest.status())
+                .fleet(fleet)
                 .build();
 
         return assetRepository.save(asset);
@@ -47,9 +52,12 @@ public class AssetService {
         Asset existingAsset = getAssetById(id);
         validateUniqueName(assetRequest.name(), id);
 
+        Fleet fleet = fleetService.getFleetById(assetRequest.fleetId());
+
         existingAsset.setName(assetRequest.name());
         existingAsset.setType(assetRequest.type());
         existingAsset.setStatus(assetRequest.status());
+        existingAsset.setFleet(fleet);
 
         return assetRepository.save(existingAsset);
     }

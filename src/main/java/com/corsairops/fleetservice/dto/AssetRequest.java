@@ -14,6 +14,8 @@ public record AssetRequest(
         AssetType type,
 
         @NotNull(message = "Status is required")
-        AssetStatus status
+        AssetStatus status,
+
+        Long fleetId
 ) {
 }

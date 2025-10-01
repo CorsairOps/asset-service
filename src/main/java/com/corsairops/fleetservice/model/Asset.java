@@ -31,6 +31,10 @@ public class Asset {
     @Column(nullable = false)
     private AssetStatus status;
 
+    @ManyToOne
+    @JoinColumn(name = "fleet_id")
+    private Fleet fleet;
+
     @CreatedDate
     private LocalDateTime createdAt;
 

@@ -13,6 +13,7 @@ public record AssetResponse(
         String name,
         AssetType type,
         AssetStatus status,
+        Long fleetId,
         LocalDateTime createdAt,
         LocalDateTime updatedAt
 ) {
@@ -24,6 +25,7 @@ public record AssetResponse(
                 asset.getName(),
                 asset.getType(),
                 asset.getStatus(),
+                asset.getFleet() != null ? asset.getFleet().getId() : null,
                 asset.getCreatedAt(),
                 asset.getUpdatedAt()
         );
