@@ -10,7 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/assets")
@@ -37,6 +39,17 @@ public class AssetController {
     @ResponseStatus(HttpStatus.OK)
     public AssetResponse getAssetById(@PathVariable("id") UUID id) {
         return AssetResponse.from(assetService.getAssetById(id));
+    }
+
+    @GetMapping("/ids")
+    @ResponseStatus(HttpStatus.OK)
+    public List<AssetResponse> getAssetsByIds(@RequestParam String ids) {
+        Set<UUID> idSet = Set.of(ids.split(",")).stream()
+                .map(UUID::fromString)
+                .collect(Collectors.toSet());
+        return assetService.getAssetsByIds(idSet).stream()
+                .map(AssetResponse::from)
+                .toList();
     }
 
     @GetMapping("/{id}/locations")

@@ -14,7 +14,7 @@ public record AssetResponse(
         AssetType type,
         AssetStatus status,
         Double longitude,
-        Double latitutde,
+        Double latitude,
         LocalDateTime createdAt,
         LocalDateTime updatedAt
 ) {

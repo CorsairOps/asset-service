@@ -12,10 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +28,11 @@ public class AssetService {
     public Asset getAssetById(UUID id) {
         return assetRepository.findById(id)
                 .orElseThrow(() -> new AssetNotFoundException("Asset not found", HttpStatus.NOT_FOUND));
+    }
+
+    @Transactional(readOnly = true)
+    public List<Asset> getAssetsByIds(Set<UUID> ids) {
+        return assetRepository.findAllById(ids);
     }
 
     @Transactional
