@@ -33,7 +33,8 @@ public class OpenAPIConfig {
     private Info info() {
         return new Info()
                 .title("Asset Service API")
-                .description("API documentation for the Asset Service");
+                .description("API documentation for the Asset Service")
+                .version("1.0.0");
     }
 
     private SecurityRequirement securityRequirement() {
