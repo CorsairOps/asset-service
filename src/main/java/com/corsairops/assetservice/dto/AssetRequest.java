@@ -16,10 +16,10 @@ public record AssetRequest(
         @NotNull(message = "Status is required")
         AssetStatus status,
 
-        @NotNull
+        @NotNull(message = "Longitude is required")
         Double longitude,
 
-        @NotNull
+        @NotNull(message = "Latitude is required")
         Double latitude
 ) {
 }
