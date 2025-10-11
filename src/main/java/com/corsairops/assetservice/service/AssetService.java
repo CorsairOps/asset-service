@@ -50,7 +50,10 @@ public class AssetService {
                 .status(assetRequest.status())
                 .longitude(assetRequest.longitude())
                 .latitude(assetRequest.latitude())
+                .assetLocations(new ArrayList<>())
                 .build();
+
+        updateAssetLocation(asset, assetRequest.longitude(), assetRequest.latitude());
 
         return assetRepository.save(asset);
     }
