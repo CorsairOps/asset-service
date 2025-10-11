@@ -44,6 +44,14 @@ public class AssetController {
                 .toList();
     }
 
+    @Operation(summary = "Get count of all assets")
+    @CommonReadResponses
+    @GetMapping("/count")
+    @ResponseStatus(HttpStatus.OK)
+    public Long getAssetCount() {
+        return assetService.getAssetCount();
+    }
+
     @Operation(summary = "Get an asset by ID")
     @CommonReadResponses
     @GetMapping("/{id}")

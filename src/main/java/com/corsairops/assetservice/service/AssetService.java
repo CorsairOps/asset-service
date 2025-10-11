@@ -35,6 +35,11 @@ public class AssetService {
         return assetRepository.findAllById(ids);
     }
 
+    @Transactional(readOnly = true)
+    public Long getAssetCount() {
+        return assetRepository.count();
+    }
+
     @Transactional
     public Asset createAsset(AssetRequest assetRequest) {
         validateUniqueName(assetRequest.name());
@@ -108,4 +113,6 @@ public class AssetService {
 
         asset.getAssetLocations().add(latestLocation);
     }
+
+
 }
