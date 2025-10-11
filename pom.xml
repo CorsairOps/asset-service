@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.corsairops</groupId>
-    <artifactId>corsairops-asset-service</artifactId>
+    <artifactId>asset-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>asset-service</name>
     <description>asset-service</description>
