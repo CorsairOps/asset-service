@@ -5,6 +5,7 @@ import com.corsairops.assetservice.exception.AssetNameConflictException;
 import com.corsairops.assetservice.exception.AssetNotFoundException;
 import com.corsairops.assetservice.model.Asset;
 import com.corsairops.assetservice.model.AssetLocation;
+import com.corsairops.assetservice.repository.AssetLocationRepository;
 import com.corsairops.assetservice.repository.AssetRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class AssetService {
     private final AssetRepository assetRepository;
+    private final AssetLocationRepository assetLocationRepository;
 
     @Transactional(readOnly = true)
     public List<Asset> getAllAssets() {
@@ -84,11 +86,12 @@ public class AssetService {
     }
 
     @Transactional(readOnly = true)
-    public List<AssetLocation> getAssetLocations(UUID assetId) {
-        var asset = getAssetById(assetId);
-        List<AssetLocation> locations = new ArrayList<>(asset.getAssetLocations());
-        locations.sort(Comparator.comparing(AssetLocation::getTimestamp).reversed());
-        return locations;
+    public List<AssetLocation> getAssetLocations(UUID assetId, Integer max) {
+        if (max == null || max <= 0) {
+            return Collections.emptyList();
+        }
+
+        return assetLocationRepository.findTopNByAssetIdOrderByTimestampDesc(assetId, max);
     }
 
     private void validateUniqueName(String name) {

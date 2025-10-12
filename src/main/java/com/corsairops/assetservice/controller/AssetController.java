@@ -77,8 +77,8 @@ public class AssetController {
     @CommonReadResponses
     @GetMapping("/{id}/locations")
     @ResponseStatus(HttpStatus.OK)
-    public List<AssetLocationResponse> getAssetLocations(@PathVariable("id") UUID id) {
-        return assetService.getAssetLocations(id).stream()
+    public List<AssetLocationResponse> getAssetLocations(@PathVariable("id") UUID id, @RequestParam(required = false, defaultValue = "100") Integer max) {
+        return assetService.getAssetLocations(id, max).stream()
                 .map(AssetLocationResponse::from)
                 .toList();
     }
