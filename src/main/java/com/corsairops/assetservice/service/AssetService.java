@@ -1,5 +1,6 @@
 package com.corsairops.assetservice.service;
 
+import com.corsairops.assetservice.dto.AssetLocationRequest;
 import com.corsairops.assetservice.dto.AssetRequest;
 import com.corsairops.assetservice.exception.AssetNameConflictException;
 import com.corsairops.assetservice.exception.AssetNotFoundException;
@@ -94,6 +95,18 @@ public class AssetService {
         return assetLocationRepository.findTopNByAssetIdOrderByTimestampDesc(assetId, max);
     }
 
+    @Transactional
+    public void changeAssetLocation(UUID assetId, AssetLocationRequest locationRequest) {
+        Asset asset = getAssetById(assetId);
+        if (asset.getLongitude().equals(locationRequest.longitude()) &&
+                asset.getLatitude().equals(locationRequest.latitude())) {
+            return; // No change in location
+        }
+
+        updateAssetLocation(asset, locationRequest.longitude(), locationRequest.latitude());
+        assetRepository.save(asset);
+    }
+
     private void validateUniqueName(String name) {
         if (assetRepository.existsByNameIgnoreCase(name)) {
             throw new AssetNameConflictException("Asset name already exists", HttpStatus.CONFLICT);
@@ -106,7 +119,7 @@ public class AssetService {
         }
     }
 
-    private void updateAssetLocation(Asset asset, Double longitude, Double latitude) {
+    private AssetLocation updateAssetLocation(Asset asset, Double longitude, Double latitude) {
         asset.setLongitude(longitude);
         asset.setLatitude(latitude);
 
@@ -118,7 +131,6 @@ public class AssetService {
                 .build();
 
         asset.getAssetLocations().add(latestLocation);
+        return latestLocation;
     }
-
-
 }

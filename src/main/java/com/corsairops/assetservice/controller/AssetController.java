@@ -1,5 +1,6 @@
 package com.corsairops.assetservice.controller;
 
+import com.corsairops.assetservice.dto.AssetLocationRequest;
 import com.corsairops.assetservice.dto.AssetLocationResponse;
 import com.corsairops.assetservice.dto.AssetRequest;
 import com.corsairops.assetservice.dto.AssetResponse;
@@ -81,6 +82,14 @@ public class AssetController {
         return assetService.getAssetLocations(id, max).stream()
                 .map(AssetLocationResponse::from)
                 .toList();
+    }
+
+    @Operation(summary = "Change asset location by asset ID")
+    @CommonWriteResponses
+    @PutMapping("/{id}/locations")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void changeAssetLocation(@PathVariable("id") UUID id, @RequestBody @Valid AssetLocationRequest locationRequest) {
+        assetService.changeAssetLocation(id, locationRequest);
     }
 
     @Operation(summary = "Update an existing asset")
