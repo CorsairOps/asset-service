@@ -8,6 +8,7 @@ import com.corsairops.assetservice.model.Asset;
 import com.corsairops.assetservice.model.AssetLocation;
 import com.corsairops.assetservice.repository.AssetLocationRepository;
 import com.corsairops.assetservice.repository.AssetRepository;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -96,7 +97,7 @@ public class AssetService {
     }
 
     @Transactional
-    public void changeAssetLocation(UUID assetId, AssetLocationRequest locationRequest) {
+    public void changeAssetLocation(UUID assetId, @Valid AssetLocationRequest locationRequest) {
         Asset asset = getAssetById(assetId);
         if (asset.getLongitude().equals(locationRequest.longitude()) &&
                 asset.getLatitude().equals(locationRequest.latitude())) {

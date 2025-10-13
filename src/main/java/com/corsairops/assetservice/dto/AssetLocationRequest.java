@@ -4,7 +4,11 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.UUID;
+
 public record AssetLocationRequest(
+        @NotNull(message = "Asset ID is required")
+        UUID assetId,
 
         @NotNull(message = "Latitude is required")
         @Min(value = -90, message = "Latitude must be between -90 and 90")
