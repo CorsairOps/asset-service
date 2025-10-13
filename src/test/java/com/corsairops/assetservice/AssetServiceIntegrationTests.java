@@ -1,5 +1,6 @@
 package com.corsairops.assetservice;
 
+import com.corsairops.assetservice.dto.AssetLocationRequest;
 import com.corsairops.assetservice.dto.AssetRequest;
 import com.corsairops.assetservice.dto.AssetResponse;
 import com.corsairops.assetservice.model.AssetStatus;
@@ -184,6 +185,47 @@ public class AssetServiceIntegrationTests {
                 .then()
                 .statusCode(200)
                 .body(equalTo(String.valueOf(bodies.size())));
+    }
+
+    @Test
+    void whenChangeAssetLocation_thenChangeLocation() {
+        AssetResponse asset = createAsset(getSampleRequestBody(0));
+        String id = String.valueOf(asset.id());
+
+        AssetLocationRequest locationRequest = new AssetLocationRequest(50.0, 50.0);
+
+        given()
+                .contentType("application/json")
+                .body(locationRequest)
+                .when()
+                .put("/api/assets/{assetId}/locations", id)
+                .then()
+                .statusCode(204);
+
+        // Verify changed
+        given()
+                .when()
+                .get("/api/assets/{assetId}", id)
+                .then()
+                .statusCode(200)
+                .body("longitude", equalTo(50.0F))
+                .body("latitude", equalTo(50.0F));
+    }
+
+    @Test
+    void givenInvalidRequest_whenChangeAssetLocation_thenBadRequest() {
+        AssetResponse asset = createAsset(getSampleRequestBody(0));
+        String id = String.valueOf(asset.id());
+
+        AssetLocationRequest locationRequest = new AssetLocationRequest(-91.0, 181.0);
+
+        given()
+                .contentType("application/json")
+                .body(locationRequest)
+                .when()
+                .put("/api/assets/{assetId}/locations", id)
+                .then()
+                .statusCode(400);
     }
 
     private List<AssetResponse> addAllSampleAssets() {
