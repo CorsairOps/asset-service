@@ -11,17 +11,21 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.Import;
 
 import java.util.List;
+import java.util.UUID;
 
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
 
 @Import(TestcontainersConfiguration.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@EnableAutoConfiguration(exclude = {KafkaAutoConfiguration.class})
 public class AssetServiceIntegrationTests {
     private static final List<AssetRequest> bodies = List.of(
             new AssetRequest("USS New Boat 5", AssetType.SHIP, AssetStatus.ACTIVE, -180.0, -90.0),
@@ -192,7 +196,7 @@ public class AssetServiceIntegrationTests {
         AssetResponse asset = createAsset(getSampleRequestBody(0));
         String id = String.valueOf(asset.id());
 
-        AssetLocationRequest locationRequest = new AssetLocationRequest(50.0, 50.0);
+        AssetLocationRequest locationRequest = new AssetLocationRequest(UUID.fromString(id), 50.0, 50.0);
 
         given()
                 .contentType("application/json")
@@ -217,7 +221,7 @@ public class AssetServiceIntegrationTests {
         AssetResponse asset = createAsset(getSampleRequestBody(0));
         String id = String.valueOf(asset.id());
 
-        AssetLocationRequest locationRequest = new AssetLocationRequest(-91.0, 181.0);
+        AssetLocationRequest locationRequest = new AssetLocationRequest(UUID.fromString(id), -91.0, 181.0);
 
         given()
                 .contentType("application/json")
