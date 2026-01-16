@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.corsairops</groupId>
     <artifactId>asset-service</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.1</version>
     <name>asset-service</name>
     <description>asset-service</description>
     <url/>
